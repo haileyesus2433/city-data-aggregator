@@ -178,7 +178,7 @@ async fn fetch_weather(
     city: &str,
     weather_client: &OpenMeteoClient,
 ) -> Result<WeatherData, AppError> {
-    timeout(Duration::from_secs(2), weather_client.get_weather(city))
+    timeout(Duration::from_secs(10), weather_client.get_weather(city))
         .await
         .map_err(|_| AppError::timeout(format!("Weather fetch for {} timed out", city)))?
 }
@@ -197,7 +197,7 @@ async fn fetch_time(
         unix_time: i64,
     }
 
-    timeout(Duration::from_secs(2), async {
+    timeout(Duration::from_secs(10), async {
         let response: TimeResponse = http_client.get_json(&url).await?;
         Ok(TimeData {
             datetime: response.datetime,

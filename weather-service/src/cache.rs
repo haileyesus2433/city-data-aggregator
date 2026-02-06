@@ -24,7 +24,8 @@ impl WeatherCache {
 
     pub async fn get(&self, city: &str) -> Option<WeatherData> {
         let cache = self.cache.read().await;
-        if let Some(entry) = cache.get(city)
+        // Case-insensitive lookup
+        if let Some(entry) = cache.get(&city.to_lowercase())
             && entry.expires_at > Instant::now()
         {
             return Some(entry.data.clone());
@@ -34,8 +35,9 @@ impl WeatherCache {
 
     pub async fn set(&self, city: String, data: WeatherData) {
         let mut cache = self.cache.write().await;
+        // Store with lowercase key for case-insensitive matching
         cache.insert(
-            city,
+            city.to_lowercase(),
             CacheEntry {
                 data,
                 expires_at: Instant::now() + self.ttl,
