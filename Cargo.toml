@@ -3,7 +3,8 @@ resolver = "2"
 members = [
     "common",
     "auth-service",
-    "weather-service"
+    "weather-service",
+    "time-service"
 ]
 
 [workspace.dependencies]
