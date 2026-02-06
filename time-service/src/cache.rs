@@ -16,12 +16,14 @@ impl TimeCache {
 
     pub async fn get(&self, city: &str) -> Option<TimeData> {
         let cache = self.cache.read().await;
-        cache.get(city).cloned()
+        // Case-insensitive lookup
+        cache.get(&city.to_lowercase()).cloned()
     }
 
     pub async fn set(&self, city: String, data: TimeData) {
         let mut cache = self.cache.write().await;
-        cache.insert(city, data);
+        // Store with lowercase key for case-insensitive matching
+        cache.insert(city.to_lowercase(), data);
     }
 }
 
